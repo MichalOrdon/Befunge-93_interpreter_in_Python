@@ -1,3 +1,5 @@
+from random import choice
+
 def interpret(code):
     output = ''
     stack = []
@@ -46,6 +48,8 @@ def interpret(code):
         current_char = code[row][position]
         if current_char in moving_char_table:
             moving_char = current_char
+        elif current_char == '?':
+            moving_char = choice(['<', '>', '^', 'v'])
         row, position = make_a_move(row, position)
 
         if current_char in available_digits:
@@ -67,5 +71,5 @@ def interpret(code):
     return output
 
 
-# print(interpret('>132-@'))
+# print(interpret('>?@'))
 # print(interpret('>987v>.v\nv456<  :\n>321 ^ _@'))
