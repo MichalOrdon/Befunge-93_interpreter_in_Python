@@ -1,5 +1,6 @@
 from random import choice
 
+
 def interpret(code):
     output = ''
     stack = []
@@ -50,6 +51,19 @@ def interpret(code):
             moving_char = current_char
         elif current_char == '?':
             moving_char = choice(['<', '>', '^', 'v'])
+        elif current_char == '_':
+            num1 = stack.pop()
+            if num1 == 0:
+                moving_char = '>'
+            else:
+                moving_char = '<'
+        elif current_char == '|':
+            num1 = stack.pop()
+            if num1 == 0:
+                moving_char = 'v'
+            else:
+                moving_char = '^'
+
         row, position = make_a_move(row, position)
 
         if current_char in available_digits:
@@ -67,6 +81,11 @@ def interpret(code):
             else:
                 output += '0'
             continue
+        if current_char == ':':
+            if len(stack) == 0:
+                output += '0'
+                continue
+            stack.append(stack[-1])
 
     return output
 
