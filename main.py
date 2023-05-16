@@ -5,6 +5,7 @@ def interpret(code):
     output = ''
     stack = []
     moving_char = ''  # going this way till direction is changed
+    text_mode = False
     moving_char_table = ['<', '>', '^', 'v']  # possibilities of move
     available_digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     available_math_signs = ['+', '-', '*', '/', '%', '`']
@@ -86,6 +87,9 @@ def interpret(code):
                 output += '0'
                 continue
             stack.append(stack[-1])
+        if current_char == '"':
+            text_mode = not text_mode
+        stack += str(ord(current_char))
 
     return output
 
