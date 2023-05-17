@@ -90,6 +90,15 @@ def interpret(code):
         if current_char == '"':
             text_mode = not text_mode
         stack += str(ord(current_char))
+        if current_char == '\\':
+            if len(stack) == 1:
+                stack.append(0)
+            stack[-2], stack[-1] = stack[-1], stack[-2]
+            continue
+        if current_char == '$':
+            stack.pop()
+        if current_char == '.':
+            output += str(stack.pop())  # it is not possible to add integer to string, sorry codewars
 
     return output
 
