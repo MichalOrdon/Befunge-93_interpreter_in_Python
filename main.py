@@ -47,6 +47,8 @@ def interpret(code):
     while current_char != '@':
         if code[row][position] == ' ':  # if new char is empty, stay with old one
             continue
+        if current_char == '#':
+            row, position = make_a_move(row, position)
         current_char = code[row][position]
         if current_char in moving_char_table:
             moving_char = current_char
