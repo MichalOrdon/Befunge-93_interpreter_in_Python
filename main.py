@@ -101,6 +101,8 @@ def interpret(code):
             stack.pop()
         if current_char == '.':
             output += str(stack.pop())  # it is not possible to add integer to string, sorry codewars
+        if current_char == ',':
+            return chr(stack.pop())
 
     return output
 
