@@ -26,26 +26,28 @@ def interpret(code):
 
     def make_a_math(a, b, math_sign):
         if math_sign == '+':
-            return str(a + b)
+            return a + b
         if math_sign == '-':
-            return str(b - a)
+            return b - a
         if math_sign == '*':
-            return str(a * b)
+            return a * b
         if math_sign == '/':  # rounded down
             if a == 0:
                 return '0'
-            return str(int(b / a))
+            return int(b / a)
         if math_sign == '%':
             if a == 0:
                 return '0'
-            return str(b % a)
+            return b % a
         if math_sign == '`':
             if b > a:
                 return '1'
             return '0'
 
     while current_char != '@':
+        # print(current_char, stack)
         if code[row][position] == ' ':  # if new char is empty, stay with old one
+            row, position = make_a_move(row, position)
             continue
         if current_char == '#':
             row, position = make_a_move(row, position)
@@ -75,23 +77,26 @@ def interpret(code):
         if current_char in available_math_signs:
             num1 = stack.pop()
             num2 = stack.pop()
-            output += make_a_math(num1, num2, current_char)
+            stack.append(make_a_math(num1, num2, current_char))
             continue
         if current_char == '!':
             num1 = stack.pop()
             if num1 == 0:
-                output += '1'
+                stack.append(1)
             else:
-                output += '0'
+                stack.append(0)
             continue
         if current_char == ':':
             if len(stack) == 0:
-                output += '0'
+                stack.append(0)
                 continue
             stack.append(stack[-1])
         if current_char == '"':
             text_mode = not text_mode
-        stack += str(ord(current_char))
+            continue
+        if text_mode:
+            stack.append(str(ord(current_char)))
+            continue
         if current_char == '\\':
             if len(stack) == 1:
                 stack.append(0)
@@ -103,9 +108,16 @@ def interpret(code):
             output += str(stack.pop())  # it is not possible to add integer to string, sorry codewars
         if current_char == ',':
             return chr(stack.pop())
+        if current_char == 'p':
+            y = stack.pop()
+            x = stack.pop()
+            v = stack.pop()
+            code[y][x] = v
+            continue
+        if current_char == 'g':
+            y = stack.pop()
+            x = stack.pop()
+            stack.append(chr(code[y][x]))
+            continue
 
     return output
-
-
-# print(interpret('>?@'))
-# print(interpret('>987v>.v\nv456<  :\n>321 ^ _@'))
