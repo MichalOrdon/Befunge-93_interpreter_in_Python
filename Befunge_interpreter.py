@@ -11,6 +11,7 @@ def interpret(code):
     available_math_signs = ['+', '-', '*', '/', '%', '`']
 
     code = code.split('\n')
+    code = [[*item] for item in code]
     row, position = 0, 0
     current_char = code[row][position]
 
@@ -95,7 +96,7 @@ def interpret(code):
             text_mode = not text_mode
             continue
         if text_mode:
-            stack.append(str(ord(current_char)))
+            stack.append(ord(current_char))
             continue
         if current_char == '\\':
             if len(stack) == 1:
@@ -104,20 +105,23 @@ def interpret(code):
             continue
         if current_char == '$':
             stack.pop()
+            continue
         if current_char == '.':
             output += str(stack.pop())  # it is not possible to add integer to string, sorry codewars
+            continue
         if current_char == ',':
-            return chr(stack.pop())
+            output += chr(stack.pop())
+            continue
         if current_char == 'p':
             y = stack.pop()
             x = stack.pop()
             v = stack.pop()
-            code[y][x] = v
+            code[y][x] = str(v)
             continue
         if current_char == 'g':
             y = stack.pop()
             x = stack.pop()
-            stack.append(chr(code[y][x]))
+            stack.append(ord(code[y][x]))
             continue
 
     return output

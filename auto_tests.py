@@ -8,7 +8,7 @@ class NamesTestCase(unittest.TestCase):
         result = Befunge_interpreter.interpret('>34+.@')
         self.assertEqual('7', result)
 
-    def test_substraction(self):
+    def test_subtraction(self):
         result = Befunge_interpreter.interpret('>43-.@')
         self.assertEqual('1', result)
 
@@ -112,14 +112,62 @@ class NamesTestCase(unittest.TestCase):
                                                '   @ ')
         self.assertEqual('1', result)
 
+    def test_string_mode(self):
+        result = Befunge_interpreter.interpret('>"olleH".....@')
+        self.assertEqual('72101108108111', result)
 
-'''
+    def test_duplicate_val_on_top_of_the_stack(self):
+        result = Befunge_interpreter.interpret('>123:....@')
+        self.assertEqual('3321', result)
 
-    def test_test(self):
-        result = Befunge_interpreter.interpret('>.@')
+    def test_duplicate_val_on_top_of_the_stack_empty_stack(self):
+        result = Befunge_interpreter.interpret('>:.@')
+        self.assertEqual('0', result)
+
+    def test_swap_two_val_on_top_of_the_stack(self):
+        result = Befunge_interpreter.interpret('>12\\..@')
+        self.assertEqual('12', result)
+
+    def test_swap_two_val_on_top_of_the_stack_one_val(self):
+        result = Befunge_interpreter.interpret('>2\\..@')
+        self.assertEqual('20', result)
+
+    def test_pop_val_and_discard_it(self):
+        result = Befunge_interpreter.interpret('>123$..@')
+        self.assertEqual('21', result)
+
+    def test_pop_val_and_output_as_integer(self):  # code wars requires string output, so it's correct
+        result = Befunge_interpreter.interpret('>123...@')
+        self.assertEqual('321', result)
+
+    def test_pop_val_and_output_as_ASCII_char(self):
+        result = Befunge_interpreter.interpret('>"olleH",,,,,@')
+        self.assertEqual('Hello', result)
+
+    def test_skip_next_cell(self):
+        result = Befunge_interpreter.interpret('>12#3..@')
+        self.assertEqual('21', result)
+
+    def test_put_call(self):                  # 0123456789
+        result = Befunge_interpreter.interpret('>950p .@')
+        self.assertEqual('9', result)
+
+    def test_get_call(self):                  # 0123456789
+        result = Befunge_interpreter.interpret('>50g.9@')
+        self.assertEqual('57', result)
+
+    def test_end_program(self):                  # 0123456789
+        result = Befunge_interpreter.interpret('>@')
         self.assertEqual('', result)
-        
-'''
+
+    def test_empty_spaces(self):                  # 0123456789
+        result = Befunge_interpreter.interpret('>       @')
+        self.assertEqual('', result)
+
+    def test_codewars_test(self):
+        result = Befunge_interpreter.interpret('>987v>.v\nv456<  :\n>321 ^ _@')
+        self.assertEqual('123456789', result)
+
 
 if __name__ == '__main__':
     unittest.main()
