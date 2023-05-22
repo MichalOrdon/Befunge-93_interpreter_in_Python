@@ -1,14 +1,16 @@
 from random import choice
+text_mode = False
 
 
 def interpret(code):
     output = ''
     stack = []
     moving_char = ''  # going this way till direction is changed
-    text_mode = False
     moving_char_table = ['<', '>', '^', 'v']  # possibilities of move
     available_digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     available_math_signs = ['+', '-', '*', '/', '%', '`']
+    available_output_chars = ['.', ',']
+    available_modifying_stack_chars = ['!', ':', '"', '\\', '$', 'g']
 
     code = code.split('\n')
     code = [[*item] for item in code]
@@ -45,8 +47,47 @@ def interpret(code):
                 return '1'
             return '0'
 
+    def make_output(to_output, to_stack, char):
+        if char == '.':
+            to_output += str(to_stack.pop())  # it is not possible to add integer to string, sorry codewars
+            return to_output, to_stack
+        if char == ',':
+            to_output += chr(to_stack.pop())
+            return to_output, to_stack
+
+    def make_stack(to_stack, to_current_char):
+        if to_current_char == '!':
+            num = to_stack.pop()
+            if num == 0:
+                to_stack.append(1)
+            else:
+                to_stack.append(0)
+            return to_stack
+        if to_current_char == ':':
+            if len(to_stack) == 0:
+                to_stack.append(0)
+                return to_stack
+            to_stack.append(to_stack[-1])
+            return to_stack
+        if to_current_char == '\\':
+            if len(to_stack) == 1:
+                to_stack.append(0)
+            to_stack[-2], to_stack[-1] = to_stack[-1], to_stack[-2]
+            return to_stack
+        if to_current_char == '$':
+            to_stack.pop()
+            return to_stack
+        if to_current_char == '"':
+            global text_mode
+            text_mode = not text_mode
+            return to_stack
+        if to_current_char == 'g':
+            y_pos = to_stack.pop()
+            x_pos = to_stack.pop()
+            to_stack.append(ord(code[y_pos][x_pos]))
+            return to_stack
+
     while current_char != '@':
-        # print(current_char, stack)
         if code[row][position] == ' ':  # if new char is empty, stay with old one
             row, position = make_a_move(row, position)
             continue
@@ -80,48 +121,19 @@ def interpret(code):
             num2 = stack.pop()
             stack.append(make_a_math(num1, num2, current_char))
             continue
-        if current_char == '!':
-            num1 = stack.pop()
-            if num1 == 0:
-                stack.append(1)
-            else:
-                stack.append(0)
-            continue
-        if current_char == ':':
-            if len(stack) == 0:
-                stack.append(0)
-                continue
-            stack.append(stack[-1])
-        if current_char == '"':
-            text_mode = not text_mode
-            continue
+        if current_char in available_modifying_stack_chars:
+            stack = make_stack(stack, current_char)
+        global text_mode
         if text_mode:
             stack.append(ord(current_char))
             continue
-        if current_char == '\\':
-            if len(stack) == 1:
-                stack.append(0)
-            stack[-2], stack[-1] = stack[-1], stack[-2]
-            continue
-        if current_char == '$':
-            stack.pop()
-            continue
-        if current_char == '.':
-            output += str(stack.pop())  # it is not possible to add integer to string, sorry codewars
-            continue
-        if current_char == ',':
-            output += chr(stack.pop())
-            continue
+        if current_char in available_output_chars:
+            output, stack = make_output(output, stack, current_char)
         if current_char == 'p':
             y = stack.pop()
             x = stack.pop()
             v = stack.pop()
             code[y][x] = str(v)
-            continue
-        if current_char == 'g':
-            y = stack.pop()
-            x = stack.pop()
-            stack.append(ord(code[y][x]))
             continue
 
     return output
