@@ -4,6 +4,28 @@ import Befunge_interpreter
 
 class NamesTestCase(unittest.TestCase):
 
+    def test_sieve_of_eratosthenes(self):
+        result = Befunge_interpreter.interpret('2>:3g" "-!v\  g30          <\n'
+                                               ' |!`"&":+1_:.:03p>03g+:"&"`|\n'
+                                               ' @               ^  p3\" ":<\n'
+                                               '2 2345678901234567890123456789012345678')
+        self.assertEqual('23571113171923293137', result)
+
+    def test_hello_world(self):
+        result = Befunge_interpreter.interpret('>25*"!dlroW olleH":v \n'
+                                               '                v:,_@\n'
+                                               '                >  ^   ')
+        self.assertEqual('Hello World!\n', result)
+
+    def test_factorial(self):
+        result = Befunge_interpreter.interpret('08>:1-:v v *_$.@\n'
+                                               '  ^    _$>\:^     ')
+        self.assertEqual('40320', result)
+
+    def test_quine(self):
+        result = Befunge_interpreter.interpret('01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@')
+        self.assertEqual('01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@', result)
+
     def test_addition(self):
         result = Befunge_interpreter.interpret('>34+.@')
         self.assertEqual('7', result)
