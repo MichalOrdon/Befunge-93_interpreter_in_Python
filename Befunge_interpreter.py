@@ -112,6 +112,7 @@ def interpret(code):
             return to_output, to_stack
 
     while current_char != '@':
+        print(stack, current_char)
         if code[row][position] == ' ' and current_char != '#' and not text_mode:  # if new char is empty, stay with old one
             if text_mode:
                 stack.append(' ')
@@ -163,6 +164,6 @@ def interpret(code):
             y = stack.pop()
             x = stack.pop()
             v = stack.pop()
-            code[y][x] = str(v)
+            code[y][x] = chr(v)
             continue
     return output

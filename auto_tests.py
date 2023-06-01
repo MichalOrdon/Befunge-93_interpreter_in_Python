@@ -171,8 +171,8 @@ class NamesTestCase(unittest.TestCase):
         self.assertEqual('21', result)
 
     def test_put_call(self):                  # 0123456789
-        result = Befunge_interpreter.interpret('>950p .@')
-        self.assertEqual('9', result)
+        result = Befunge_interpreter.interpret('>950p ,@')  # zrób nowy test
+        self.assertEqual('STX', result)
 
     def test_get_call(self):                  # 0123456789
         result = Befunge_interpreter.interpret('>50g.9@')
