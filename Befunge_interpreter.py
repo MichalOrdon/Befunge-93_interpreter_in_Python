@@ -55,16 +55,16 @@ def interpret(code):
             return a * b
         if math_sign == '/':  # rounded down
             if a == 0:
-                return '0'
+                return 0
             return int(b / a)
         if math_sign == '%':
             if a == 0:
-                return '0'
+                return 0
             return b % a
         if math_sign == '`':
             if b > a:
-                return '1'
-            return '0'
+                return 1
+            return 0
 
     def make_stack(to_stack, to_current_char):
         if to_current_char == '!':
@@ -112,7 +112,6 @@ def interpret(code):
             return to_output, to_stack
 
     while current_char != '@':
-        print(stack, current_char)
         if code[row][position] == ' ' and current_char != '#' and not text_mode:  # if new char is empty, stay with old one
             if text_mode:
                 stack.append(' ')

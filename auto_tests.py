@@ -7,7 +7,7 @@ class NamesTestCase(unittest.TestCase):
     def test_sieve_of_eratosthenes(self):
         result = Befunge_interpreter.interpret('2>:3g" "-!v\  g30          <\n'
                                                ' |!`"&":+1_:.:03p>03g+:"&"`|\n'
-                                               ' @               ^  p3\" ":<\n'
+                                               ' @               ^  p3\\" ":<\n'
                                                '2 2345678901234567890123456789012345678')
         self.assertEqual('23571113171923293137', result)
 
@@ -170,9 +170,10 @@ class NamesTestCase(unittest.TestCase):
         result = Befunge_interpreter.interpret('>12#3..@')
         self.assertEqual('21', result)
 
+    # TODO: zaimplementuj obsługę znaków niestandardowych jak STX czy tabulacja pozioma
     def test_put_call(self):                  # 0123456789
-        result = Befunge_interpreter.interpret('>950p ,@')  # zrób nowy test
-        self.assertEqual('STX', result)
+        result = Befunge_interpreter.interpret('>250p ,@')  # zrób nowy test
+        self.assertEqual('\x02', result)
 
     def test_get_call(self):                  # 0123456789
         result = Befunge_interpreter.interpret('>50g.9@')
